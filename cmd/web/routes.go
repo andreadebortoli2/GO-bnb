@@ -1,0 +1,28 @@
+package main
+
+import (
+	"net/http"
+
+	"github.com/andreadebortoli2/GO-bnb/pkg/config"
+	"github.com/andreadebortoli2/GO-bnb/pkg/handlers"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+)
+
+// routes handle all the routes
+func routes(app *config.AppConfig) http.Handler {
+
+	mux := chi.NewRouter()
+
+	// recover from panics, log the panic and return an HTTP 500 status(if possible)
+	mux.Use(middleware.Recoverer)
+	// add crsf token in cookies for POST protection
+	mux.Use(NoSurf)
+	// load and use the session
+	mux.Use(SessionLoad)
+
+	mux.Get("/", handlers.Repo.Home)
+	mux.Get("/about", handlers.Repo.About)
+
+	return mux
+}
