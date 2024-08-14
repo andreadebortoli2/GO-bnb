@@ -91,7 +91,12 @@
         <div class="row">
           <div class="col-md-6 mx-auto">
             <h1 class="text-center mt-5">Search for Availability</h1>
-            <form class="row" action="reservation.html" method="get">
+            <form
+              class="row needs-validation"
+              action="reservation.html"
+              method="get"
+              novalidate
+            >
               <div class="mb-3 col-6">
                 <label for="start-date" class="form-label">Email address</label>
                 <input
@@ -145,5 +150,31 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
+    <script>
+      // JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+    </script>
   </body>
 </html>
