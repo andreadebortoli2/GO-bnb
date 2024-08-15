@@ -186,37 +186,41 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
+      // Sweetalert2 module
+      let attention = sweetalertPrompt();
+
+      // JavaScript for disabling form submissions if there are invalid fields
+      (() => {
+        "use strict";
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll(".needs-validation");
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach((form) => {
+          form.addEventListener(
+            "submit",
+            (event) => {
+              if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+              }
+
+              form.classList.add("was-validated");
+            },
+            false
+          );
+        });
+      })();
+
       // test button
-      let ts = document
+      document
         .getElementById("test-btn")
         .addEventListener("click", function () {
           // notify("this is a message", "success");
           // notifyModal("title", "<em>hello,world</em>", "success", "my text for the button")
-        })(
-        // JavaScript for disabling form submissions if there are invalid fields
-        () => {
-          "use strict";
-
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          const forms = document.querySelectorAll(".needs-validation");
-
-          // Loop over them and prevent submission
-          Array.from(forms).forEach((form) => {
-            form.addEventListener(
-              "submit",
-              (event) => {
-                if (!form.checkValidity()) {
-                  event.preventDefault();
-                  event.stopPropagation();
-                }
-
-                form.classList.add("was-validated");
-              },
-              false
-            );
-          });
-        }
-      )();
+          attention.error({ message: "Oooops!!" });
+        });
 
       // Vanilla JS Datepicker logic
       const elem = document.getElementById("reservation-dates");
@@ -240,6 +244,54 @@
           icon: icon,
           confirmButtonText: confirmationButton,
         });
+      }
+
+      function sweetalertPrompt() {
+        let toast = function (c) {
+          const { message = "", icon = "success", position = "top-end" } = c;
+
+          const Toast = Swal.mixin({
+            toast: true,
+            title: message,
+            position: position,
+            icon: icon,
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+
+          Toast.fire({});
+        };
+
+        let success = function (c) {
+          const { message = "", title = "", footer = "" } = c;
+          Swal.fire({
+            icon: "success",
+            title: title,
+            text: message,
+            footer: footer,
+          });
+        };
+
+        let error = function (c) {
+          const { message = "", title = "", footer = "" } = c;
+          Swal.fire({
+            icon: "error",
+            title: title,
+            text: message,
+            footer: footer,
+          });
+        };
+
+        return {
+          toast: toast,
+          success: success,
+          error: error,
+        };
       }
     </script>
   </body>
