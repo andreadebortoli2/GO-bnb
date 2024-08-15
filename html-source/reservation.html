@@ -111,7 +111,7 @@
             <form
               class="row needs-validation"
               action="reservation.html"
-              method="get"
+              method="post"
               novalidate
             >
               <div class="row py-3 mx-auto" id="reservation-dates">
@@ -142,14 +142,6 @@
                   Search Availability
                 </button>
               </div>
-            </form>
-            <form
-              action="reservation.html"
-              method="get"
-              class="row needs-validation"
-              novalidate
-            >
-              <div class="col"></div>
             </form>
           </div>
         </div>
@@ -219,7 +211,20 @@
         .addEventListener("click", function () {
           // notify("this is a message", "success");
           // notifyModal("title", "<em>hello,world</em>", "success", "my text for the button")
-          attention.error({ message: "Oooops!!" });
+          // attention.error({ message: "Oooops!!" });
+          let html = `
+          <form class="row needs-validation" id="check-availability-form" action="reservation.html" method="post" novalidate>
+              <div class="row py-3 mx-auto" id="reservation-dates-modal">
+                <div class="col">
+                  <input class="form-control" type="text" name="start" id="start" placeholder="Arrival" disabled required />
+                </div>
+                <div class="col">
+                  <input class="form-control" type="text" name="end" id="end" placeholder="Departure" disabled required />
+                </div>
+              </div>
+            </form>
+          `;
+          attention.custom({ message: html, title: "Choose your dates" });
         });
 
       // Vanilla JS Datepicker logic
@@ -287,10 +292,44 @@
           });
         };
 
+        // TODO: fix range picker z-index
+        async function custom(c) {
+          const { message = "", title = "" } = c;
+
+          const { value: formValues } = await Swal.fire({
+            title: title,
+            html: message,
+            backdrop: false,
+            focusConfirm: false,
+            showCancelButton: true,
+            willOpen: () => {
+              const elem = document.getElementById("reservation-dates-modal");
+              const rangePicker = new DateRangePicker(elem, {
+                format: "yyyy-mm-dd",
+                showOnFocus: true,
+              });
+            },
+            preConfirm: () => {
+              return [
+                document.getElementById("start").value,
+                document.getElementById("end").value,
+              ];
+            },
+            didOpen: () => {
+              document.getElementById("start").removeAttribute("disabled");
+              document.getElementById("end").removeAttribute("disabled");
+            },
+          });
+          if (formValues) {
+            Swal.fire(JSON.stringify(formValues));
+          }
+        }
+
         return {
           toast: toast,
           success: success,
           error: error,
+          custom: custom,
         };
       }
     </script>
