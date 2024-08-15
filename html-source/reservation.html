@@ -10,6 +10,10 @@
       integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/css/datepicker-bs5.min.css"
+    />
 
     <style>
       .my-footer {
@@ -97,40 +101,42 @@
               method="get"
               novalidate
             >
-              <div class="mb-3 col-6">
-                <label for="start-date" class="form-label">Email address</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="start-date"
-                  name="start-date"
-                  aria-describedby="startDateHelp"
-                  required
-                />
-                <div id="startDateHelp" class="form-text">
-                  Enter your starting date in the form of YYYY-MM-DD.
+              <div class="row py-3" id="reservation-dates">
+                <div class="col">
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="start"
+                    placeholder="Arrival"
+                    required
+                  />
+                </div>
+                <div class="col">
+                  <input
+                    class="form-control"
+                    type="text"
+                    name="end"
+                    placeholder="Departure"
+                    required
+                  />
                 </div>
               </div>
-              <div class="mb-3 col-6">
-                <label for="end-date" class="form-label">Email address</label>
-                <input
-                  type="date"
-                  class="form-control"
-                  id="end-date"
-                  name="end-date"
-                  aria-describedby="endDateHelp"
-                  required
-                />
-                <div id="endDateHelp" class="form-text">
-                  Enter your ending date in the form of YYYY-MM-DD.
-                </div>
-              </div>
+
+              <hr />
 
               <div class="col-12">
                 <button type="submit" class="btn btn-primary">
                   Search Availability
                 </button>
               </div>
+            </form>
+            <form
+              action="reservation.html"
+              method="get"
+              class="row needs-validation"
+              novalidate
+            >
+              <div class="col"></div>
             </form>
           </div>
         </div>
@@ -150,6 +156,8 @@
       integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
       crossorigin="anonymous"
     ></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/dist/js/datepicker-full.min.js"></script>
 
     <script>
       // JavaScript for disabling form submissions if there are invalid fields
@@ -175,6 +183,12 @@
           );
         });
       })();
+
+      // date picker logic
+      const elem = document.getElementById("reservation-dates");
+      const rangepicker = new DateRangePicker(elem, {
+        format: "yyyy-mm-dd",
+      });
     </script>
   </body>
 </html>
