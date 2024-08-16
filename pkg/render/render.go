@@ -9,6 +9,7 @@ import (
 
 	"github.com/andreadebortoli2/GO-bnb/pkg/config"
 	"github.com/andreadebortoli2/GO-bnb/pkg/models"
+	"github.com/justinas/nosurf"
 )
 
 var app *config.AppConfig
@@ -19,12 +20,13 @@ func NewTemplates(a *config.AppConfig) {
 }
 
 // ? prepared for later usage
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CRSFToken = nosurf.Token(r)
 	return td
 }
 
 // RenderTemplates renders templates using html/template
-func RenderTemplates(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplates(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 
 	var templateCache map[string]*template.Template
 
@@ -42,7 +44,7 @@ func RenderTemplates(w http.ResponseWriter, tmpl string, td *models.TemplateData
 	}
 
 	// ? preapared for later usage
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	buf := new(bytes.Buffer)
 	err := requestedTemplate.Execute(buf, td)

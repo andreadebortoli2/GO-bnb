@@ -8,10 +8,11 @@
             <h1 class="text-center mt-5">Search for Availability</h1>
             <form
               class="row needs-validation"
-              action="reservation.html"
+              action="/search-availability"
               method="post"
               novalidate
             >
+              <input type="hidden" name="csrf_token" value="{{.CRSFToken}}">
               <div class="row py-3 mx-auto" id="reservation-dates">
                 <div class="col">
                   <input
