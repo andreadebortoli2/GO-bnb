@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/andreadebortoli2/GO-bnb/pkg/config"
@@ -70,6 +72,29 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 	w.Write([]byte(fmt.Sprintf("start date is %s and end date is %s", start, end)))
+}
+
+type jsonResponse struct {
+	OK      bool   `json:"ok"`
+	Message string `json:"message"`
+}
+
+// AvailabilityJSON handle request for availability and send json
+func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+	response := jsonResponse{
+		OK:      true,
+		Message: "Available!",
+	}
+
+	responseMarshaled, err := json.MarshalIndent(response, "", "     ")
+	if err != nil {
+		log.Println(err)
+	}
+
+	log.Println(string(responseMarshaled))
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(responseMarshaled)
 }
 
 // Generals renders the genereal's quarters room page
