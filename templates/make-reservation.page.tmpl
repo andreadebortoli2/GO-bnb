@@ -6,42 +6,65 @@
         <div class="row">
           <div class="col">
             <h1 class="text-center my-4">Make reservation</h1>
+            <p><strong>Reservation Details</strong></p>
 
-            <form class="need-validation" action="" method="post" novalidate>
+            {{$res := index .Data "reservation"}}
+
+            {{/*  <form class="need-validation" action="/make-reservation" method="post" novalidate>  */}}
+            <form action="/make-reservation" method="post">
+
+              <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+              
               <div class="form-group">
                 <label for="first-name">First name:</label>
+                {{with .Form.Errors.Get "first-name"}}
+                <label class="text-danger"> {{.}} </label>
+                {{end}}
                 <input
-                  class="form-control"
+                  class="form-control {{with .Form.Errors.Get "first-name"}} is-invalid {{end}}"
                   type="text"
                   name="first-name"
                   id="first-name"
+                  value="{{$res.FirstName}}"
                 />
               </div>
               <div class="form-group">
                 <label for="last-name">Last name:</label>
+                {{with .Form.Errors.Get "last-name"}}
+                <label class="text-danger"> {{.}} </label>
+                {{end}}
                 <input
-                  class="form-control"
+                  class="form-control {{with .Form.Errors.Get "last-name"}} is-invalid {{end}}"
                   type="text"
                   name="last-name"
                   id="last-name"
+                  value="{{$res.LastName}}"
                 />
               </div>
               <div class="form-group">
                 <label for="email">Email:</label>
+                {{with .Form.Errors.Get "email"}}
+                <label class="text-danger"> {{.}} </label>
+                {{end}}
                 <input
-                  class="form-control"
+                  class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}"
                   type="email"
                   name="email"
                   id="email"
+                  value="{{$res.Email}}"
                 />
               </div>
               <div class="form-group">
                 <label for="phone">Phone number:</label>
+                {{with .Form.Errors.Get "phone"}}
+                <label class="text-danger"> {{.}} </label>
+                {{end}}
                 <input
-                  class="form-control"
+                  class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}"
                   type="text"
                   name="phone"
                   id="phone"
+                  value="{{$res.Phone}}"
                 />
               </div>
               <hr />
@@ -55,4 +78,11 @@
         </div>
       </div>
     </main>
+{{end}}
+
+{{define "js"}}
+<script>
+  // put it back in the template to activate clientside validation handling after test on server validation
+  // <form class="need-validation" action="/make-reservation" method="post" novalidate>
+</script>
 {{end}}

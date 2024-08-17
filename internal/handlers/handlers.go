@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	"github.com/andreadebortoli2/GO-bnb/internal/config"
+	"github.com/andreadebortoli2/GO-bnb/internal/forms"
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
 	"github.com/andreadebortoli2/GO-bnb/internal/render"
 )
@@ -57,9 +58,19 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Reservation renders the make a reservation page and displays form
-func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, r, "make-reservation.page.tmpl", &models.TemplateData{})
+// Generals renders the genereal's quarters room page
+func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, r, "generals.page.tmpl", &models.TemplateData{})
+}
+
+// Reservation renders the major's suite room page
+func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, r, "majors.page.tmpl", &models.TemplateData{})
+}
+
+// Reservation renders the contact page
+func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	render.RenderTemplates(w, r, "contact.page.tmpl", &models.TemplateData{})
 }
 
 // Availability renders the search availability page
@@ -95,17 +106,46 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	w.Write(responseMarshaled)
 }
 
-// Generals renders the genereal's quarters room page
-func (m *Repository) Generals(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, r, "generals.page.tmpl", &models.TemplateData{})
+// Reservation renders the make a reservation page and displays form
+func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	var emptyReservation models.Reservation
+	data := make(map[string]interface{})
+	data["reservation"] = emptyReservation
+	render.RenderTemplates(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+		Form: forms.New(nil),
+		Data: data,
+	})
 }
 
-// Reservation renders the major's suite room page
-func (m *Repository) Majors(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, r, "majors.page.tmpl", &models.TemplateData{})
-}
+// PostReservation handles the posting of a reservation form
+func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
-// Reservation renders the major's suite room page
-func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplates(w, r, "contact.page.tmpl", &models.TemplateData{})
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first-name"),
+		LastName:  r.Form.Get("last-name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.Form.Get("phone"),
+	}
+
+	form := forms.New(r.PostForm)
+
+	// form.Has("first-name", r)
+	form.Required("first-name", "last-name", "email")
+	form.MinLength("first-name", 3, r)
+	form.IsEmail("email")
+
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+		render.RenderTemplates(w, r, "make-reservation.page.tmpl", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+		return
+	}
 }
