@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"path/filepath"
 
-	"github.com/andreadebortoli2/GO-bnb/pkg/config"
-	"github.com/andreadebortoli2/GO-bnb/pkg/models"
+	"github.com/andreadebortoli2/GO-bnb/internal/config"
+	"github.com/andreadebortoli2/GO-bnb/internal/models"
 	"github.com/justinas/nosurf"
 )
 
