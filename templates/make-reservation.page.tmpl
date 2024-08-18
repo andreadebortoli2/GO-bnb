@@ -20,69 +20,34 @@
                 {{with .Form.Errors.Get "first-name"}}
                 <label class="text-danger"> {{.}} </label>
                 {{end}}
-                <input
-                  class="form-control {{with .Form.Errors.Get "first-name"}} is-invalid {{end}}"
-                  type="text"
-                  name="first-name"
-                  id="first-name"
-                  value="{{$res.FirstName}}"
-                />
+                <input class="form-control {{with .Form.Errors.Get "first-name"}} is-invalid {{end}}" type="text" name="first-name" id="first-name" value="{{$res.FirstName}}" />
               </div>
               <div class="form-group">
                 <label for="last-name">Last name:</label>
                 {{with .Form.Errors.Get "last-name"}}
                 <label class="text-danger"> {{.}} </label>
                 {{end}}
-                <input
-                  class="form-control {{with .Form.Errors.Get "last-name"}} is-invalid {{end}}"
-                  type="text"
-                  name="last-name"
-                  id="last-name"
-                  value="{{$res.LastName}}"
-                />
+                <input class="form-control {{with .Form.Errors.Get "last-name"}} is-invalid {{end}}" type="text" name="last-name" id="last-name" value="{{$res.LastName}}" />
               </div>
               <div class="form-group">
                 <label for="email">Email:</label>
                 {{with .Form.Errors.Get "email"}}
                 <label class="text-danger"> {{.}} </label>
                 {{end}}
-                <input
-                  class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}"
-                  type="email"
-                  name="email"
-                  id="email"
-                  value="{{$res.Email}}"
-                />
+                <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" type="email" name="email" id="email" value="{{$res.Email}}" />
               </div>
               <div class="form-group">
                 <label for="phone">Phone number:</label>
                 {{with .Form.Errors.Get "phone"}}
                 <label class="text-danger"> {{.}} </label>
                 {{end}}
-                <input
-                  class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}"
-                  type="text"
-                  name="phone"
-                  id="phone"
-                  value="{{$res.Phone}}"
-                />
+                <input class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" type="text" name="phone" id="phone" value="{{$res.Phone}}" />
               </div>
               <hr />
-              <input
-                type="submit"
-                class="btn btn-primary"
-                value="Make reservation"
-              />
+              <input type="submit" class="btn btn-primary" value="Make reservation" />
             </form>
           </div>
         </div>
       </div>
     </main>
-{{end}}
-
-{{define "js"}}
-<script>
-  // put it back in the template to activate clientside validation handling after test on server validation
-  // <form class="need-validation" action="/make-reservation" method="post" novalidate>
-</script>
 {{end}}

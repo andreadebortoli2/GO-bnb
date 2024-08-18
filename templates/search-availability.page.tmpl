@@ -6,31 +6,14 @@
         <div class="row">
           <div class="col-md-6 mx-auto">
             <h1 class="text-center mt-5">Search for Availability</h1>
-            <form
-              class="row needs-validation"
-              action="/search-availability"
-              method="post"
-              novalidate
-            >
+            <form class="row needs-validation" action="/search-availability" method="post" novalidate >
               <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
               <div class="row py-3 mx-auto" id="reservation-dates">
                 <div class="col">
-                  <input
-                    class="form-control"
-                    type="text"
-                    name="start"
-                    placeholder="Arrival"
-                    required
-                  />
+                  <input class="form-control" type="text" name="start" placeholder="Arrival" required />
                 </div>
                 <div class="col">
-                  <input
-                    class="form-control"
-                    type="text"
-                    name="end"
-                    placeholder="Departure"
-                    required
-                  />
+                  <input class="form-control" type="text" name="end" placeholder="Departure" required />
                 </div>
               </div>
 
@@ -50,10 +33,10 @@
 
 {{define "js"}}
 <script>
-      // Vanilla JS Datepicker logic
-      const elem = document.getElementById("reservation-dates");
-      const rangepicker = new DateRangePicker(elem, {
-        format: "yyyy-mm-dd",
-      });
+    // Vanilla JS Datepicker logic
+    const elem = document.getElementById("reservation-dates");
+    const rangepicker = new DateRangePicker(elem, {
+      format: "yyyy-mm-dd",
+    });
 </script>
 {{end}}
