@@ -1,18 +1,18 @@
 .my-footer {
-    height: 5rem;
-    margin-top: 2rem;
-    padding: 1rem;
-    background-color: #163b65;
-    color: #ffffff;
-    font-size: 0.8rem;
-  }
+  height: 5rem;
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #163b65;
+  color: #ffffff;
+  font-size: 0.8rem;
+}
 
-  /* override Notie alert styles */
-  .notie-container {
-    box-shadow: none;
-  }
+/* override Notie alert styles */
+.notie-container {
+  box-shadow: none;
+}
 
-  /* fix datepicker and sweetalert conflict on z-index */
-  .swal2-actions {
-    z-index: 0;
-  }
+/* fix datepicker and sweetalert conflict on z-index */
+.swal2-actions {
+  z-index: 0;
+}
