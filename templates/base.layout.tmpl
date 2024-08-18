@@ -55,7 +55,7 @@
     {{block "content" .}}
     {{end}}
 
-<footer>
+    <footer>
       <div class="row my-footer">
         <div class="col">Left</div>
         <div class="col">Middle</div>
@@ -119,6 +119,17 @@
           confirmButtonText: confirmationButton,
         });
       }
+
+      // handle eventual messages
+      {{with .Error}}
+      notify("{{.}}","error")
+      {{end}}
+      {{with .Flash}}
+      notify("{{.}}","success")
+      {{end}}
+      {{with .Warning}}
+      notify("{{.}}","warning")
+      {{end}}
 
       function sweetalertPrompt() {
         let toast = function (c) {

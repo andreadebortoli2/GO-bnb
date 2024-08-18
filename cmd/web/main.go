@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 	"github.com/alexedwards/scs/v2"
 	"github.com/andreadebortoli2/GO-bnb/internal/config"
 	"github.com/andreadebortoli2/GO-bnb/internal/handlers"
+	"github.com/andreadebortoli2/GO-bnb/internal/models"
 	"github.com/andreadebortoli2/GO-bnb/internal/render"
 )
 
@@ -19,6 +21,8 @@ var session *scs.SessionManager
 
 // main is the main application function
 func main() {
+	// what i'm going to store in the session
+	gob.Register(models.Reservation{})
 
 	// change to true when in production
 	app.InProduction = false
