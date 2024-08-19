@@ -1,0 +1,25 @@
+mode: set
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:24.40,26.2 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:29.84,35.2 5 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:38.106,42.18 2 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:42.18,45.3 1 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:45.8,48.3 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:50.2,51.9 2 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:51.9,53.3 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:56.2,60.16 4 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:60.16,62.3 1 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:64.2,65.16 2 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:65.16,68.3 2 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:70.2,70.12 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:74.67,79.16 3 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:79.16,81.3 1 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:83.2,83.29 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:83.29,86.17 3 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:86.17,88.4 1 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:89.3,90.17 2 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:90.17,92.4 1 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:93.3,93.23 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:93.23,95.18 2 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:95.18,97.5 1 0
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:99.3,99.30 1 1
+github.com/andreadebortoli2/GO-bnb/internal/render/render.go:102.2,102.21 1 1
