@@ -10,6 +10,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/andreadebortoli2/GO-bnb/internal/config"
+	"github.com/andreadebortoli2/GO-bnb/internal/driver"
 	"github.com/andreadebortoli2/GO-bnb/internal/handlers"
 	"github.com/andreadebortoli2/GO-bnb/internal/helpers"
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
@@ -26,10 +27,11 @@ var errorLog *log.Logger
 // main is the main application function
 func main() {
 
-	err := run()
+	db, err := run()
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer db.SQL.Close()
 
 	// set the server
 	_, _ = fmt.Printf("Starting application on port %s \n", portNumber)
@@ -41,7 +43,7 @@ func main() {
 	log.Fatal(err)
 }
 
-func run() error {
+func run() (*driver.DB, error) {
 
 	// what i'm going to store in the session
 	gob.Register(models.Reservation{})
@@ -64,16 +66,24 @@ func run() error {
 	session.Cookie.Secure = app.InProduction
 	app.Session = session
 
+	// connect to database
+	log.Println("Connecting to database...")
+	db, err := driver.ConnectSQL("host=localhost port=5432 dbname=go_bnb user=postgres password=password")
+	if err != nil {
+		log.Fatal("Cannot connect to database! Dying...")
+	}
+	log.Println("Connected to database")
+
 	// generate template cache and save in AppConfig
 	templateCache, err := render.CreateTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
-		return err
+		return nil, err
 	}
 	app.TemplateCache = templateCache
 
-	// set the config as repo for the handlers and set the config available to handlers pkg
-	repo := handlers.NewRepo(&app)
+	// set the config + database connection as repo for the handlers and set the config + database available to handlers pkg
+	repo := handlers.NewRepo(&app, db)
 	handlers.NewHandlers(repo)
 
 	// set the config available to render pkg
@@ -82,5 +92,5 @@ func run() error {
 	// set the config available to helpers pkg
 	helpers.NewHelpers(&app)
 
-	return nil
+	return db, nil
 }

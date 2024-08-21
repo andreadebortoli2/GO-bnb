@@ -6,10 +6,13 @@ import (
 	"net/http"
 
 	"github.com/andreadebortoli2/GO-bnb/internal/config"
+	"github.com/andreadebortoli2/GO-bnb/internal/driver"
 	"github.com/andreadebortoli2/GO-bnb/internal/forms"
 	"github.com/andreadebortoli2/GO-bnb/internal/helpers"
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
 	"github.com/andreadebortoli2/GO-bnb/internal/render"
+	"github.com/andreadebortoli2/GO-bnb/internal/repository"
+	"github.com/andreadebortoli2/GO-bnb/internal/repository/dbrepo"
 )
 
 // Repo the repository used by the handlers
@@ -18,12 +21,14 @@ var Repo *Repository
 // Repository is the repository type
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(a *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
 		App: a,
+		DB:  dbrepo.NewPostgresRepo(db.SQL, a),
 	}
 }
 
