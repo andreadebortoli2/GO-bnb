@@ -7,8 +7,8 @@ import (
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
 )
 
-func TestNewTemplates(t *testing.T) {
-	NewTemplates(app)
+func TestNewRenderer(t *testing.T) {
+	NewRenderer(app)
 }
 
 func TestAddDefaultData(t *testing.T) {
@@ -27,7 +27,7 @@ func TestAddDefaultData(t *testing.T) {
 	}
 }
 
-func TestRenderTemplates(t *testing.T) {
+func TestTemplates(t *testing.T) {
 	pathToTemplates = "./../../templates"
 	tc, err := CreateTemplateCache()
 	if err != nil {
@@ -42,12 +42,12 @@ func TestRenderTemplates(t *testing.T) {
 
 	var ww myWriter
 
-	err = RenderTemplates(&ww, r, "home.page.tmpl", &models.TemplateData{})
+	err = Templates(&ww, r, "home.page.tmpl", &models.TemplateData{})
 	if err != nil {
 		t.Error("error writing template to browser")
 	}
 
-	err = RenderTemplates(&ww, r, "non-existent.page.tmpl", &models.TemplateData{})
+	err = Templates(&ww, r, "non-existent.page.tmpl", &models.TemplateData{})
 	if err == nil {
 		t.Error("rendered template that does not exist")
 	}
