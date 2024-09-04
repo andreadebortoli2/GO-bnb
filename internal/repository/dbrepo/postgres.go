@@ -42,7 +42,7 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) 
 }
 
 // InsertRoomRestriction insert a restriction into the database
-func (m postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
+func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -68,7 +68,7 @@ func (m postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 }
 
 // SearchAvailabilityByDatesByRoomID return true if availability exists for room id, and false if no avaliability exists
-func (m postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
+func (m *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -95,7 +95,7 @@ func (m postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, 
 }
 
 // SearchAvailabilityForAllRooms return a slice of available rooms, if any, for given date range
-func (m postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
+func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -131,4 +131,28 @@ func (m postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]m
 	}
 
 	return rooms, nil
+}
+
+// GetRoomByID gets room by id
+func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var room models.Room
+
+	query := `select id, room_name, created_at, updated_at where id = $1`
+
+	row := m.DB.QueryRowContext(ctx, query, id)
+	err := row.Scan(
+		&room.ID,
+		&room.RoomName,
+		&room.CreatedAt,
+		&room.UpdatedAt,
+	)
+	if err != nil {
+		return room, err
+	}
+
+	return room, nil
 }
