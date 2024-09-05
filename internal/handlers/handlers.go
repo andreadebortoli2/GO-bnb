@@ -123,8 +123,22 @@ type jsonResponse struct {
 	EndDate   string `json:"end_date"`
 }
 
-// AvailabilityJSON handle request for availability and send json
+// AvailabilityJSON handle request for availability and send JSON response
 func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
+
+	err := r.ParseForm()
+	if err != nil {
+		// can't parse form, so return appropriate json
+		resp := jsonResponse{
+			OK:      false,
+			Message: "Internal server error",
+		}
+
+		out, _ := json.MarshalIndent(resp, "", "     ")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(out)
+		return
+	}
 
 	// prepare data to look for availability
 	sd := r.Form.Get("start")
@@ -149,7 +163,15 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	// look for availability
 	available, err := m.DB.SearchAvailabilityByDatesByRoomID(startDate, endDate, roomID)
 	if err != nil {
-		helpers.ServerError(w, err)
+		// got a database error, so return appropriate json
+		response := jsonResponse{
+			OK:      false,
+			Message: "Error querying database",
+		}
+
+		out, _ := json.MarshalIndent(response, "", "     ")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(out)
 		return
 	}
 
@@ -161,12 +183,10 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		EndDate:   ed,
 		RoomID:    strconv.Itoa(roomID),
 	}
-	responseMarshaled, err := json.MarshalIndent(response, "", "     ")
-	if err != nil {
-		helpers.ServerError(w, err)
-	}
+	out, _ := json.MarshalIndent(response, "", "     ")
+
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(responseMarshaled)
+	w.Write(out)
 }
 
 // Reservation renders the make a reservation page and displays form
