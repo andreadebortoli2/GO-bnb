@@ -1,6 +1,7 @@
 package dbrepo
 
 import (
+	"errors"
 	"time"
 
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
@@ -12,11 +13,18 @@ func (m *testDBRepo) AllUsers() bool {
 
 // InsertReservation insert a reservation into the database
 func (m *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
+	// if the room id is 2, then fail; otherwise pass
+	if res.RoomID == 2 {
+		return 0, errors.New("some error")
+	}
 	return 1, nil
 }
 
 // InsertRoomRestriction insert a restriction into the database
 func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
+	if r.RoomID == 1000 {
+		return errors.New("some error")
+	}
 	return nil
 }
 
@@ -34,5 +42,8 @@ func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]mode
 // GetRoomByID gets room by id
 func (m *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 	var room models.Room
+	if id > 2 {
+		return room, errors.New("some error")
+	}
 	return room, nil
 }
