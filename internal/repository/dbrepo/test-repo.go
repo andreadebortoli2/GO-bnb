@@ -30,12 +30,33 @@ func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 
 // SearchAvailabilityByDatesByRoomID return true if availability exists for room id, and false if no avaliability exists
 func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
+	// if the room id is 2, then fail; otherwise pass
+	if roomID == 2 {
+		return false, errors.New("some error")
+	}
+	// if start equal "2030-01-01" return there are availability
+	layout := "2006-01-02"
+	startDate, _ := time.Parse(layout, "2030-01-01")
+	if start == startDate {
+		return true, nil
+	}
 	return false, nil
 }
 
 // SearchAvailabilityForAllRooms return a slice of available rooms, if any, for given date range
 func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
 	var rooms []models.Room
+	// if start and end equlas returen error
+	if start == end {
+		return rooms, errors.New("some error")
+	}
+	// if start equal "2030-01-01" return there are rooms
+	layout := "2006-01-02"
+	startDate, _ := time.Parse(layout, "2030-01-01")
+	if start == startDate {
+		rooms = []models.Room{{ID: 1}, {ID: 2}}
+		return rooms, nil
+	}
 	return rooms, nil
 }
 

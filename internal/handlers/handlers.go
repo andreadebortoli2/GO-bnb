@@ -4,17 +4,16 @@ import (
 	"encoding/json"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/andreadebortoli2/GO-bnb/internal/config"
 	"github.com/andreadebortoli2/GO-bnb/internal/driver"
 	"github.com/andreadebortoli2/GO-bnb/internal/forms"
-	"github.com/andreadebortoli2/GO-bnb/internal/helpers"
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
 	"github.com/andreadebortoli2/GO-bnb/internal/render"
 	"github.com/andreadebortoli2/GO-bnb/internal/repository"
 	"github.com/andreadebortoli2/GO-bnb/internal/repository/dbrepo"
-	"github.com/go-chi/chi/v5"
 )
 
 // Repo the repository used by the handlers
@@ -79,6 +78,12 @@ func (m *Repository) Availability(w http.ResponseWriter, r *http.Request) {
 
 // PostAvailability
 func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		m.App.Session.Put(r.Context(), "error", "can't parse form")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		return
+	}
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 	// parse time from: 01/02 03:04:05PM '06 -0700 to: 2006-01-02
@@ -341,7 +346,6 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	reservation, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		// if there is no reservation in session cause of error or user bad behavior send back to home page with error message
-		m.App.ErrorLog.Println("can't get error from session")
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
@@ -376,16 +380,22 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 // ChooseRoom diplays a list of available rooms
 func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	// get room id from url params
-	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	// roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	// changed to this, so we can test it more easily
+	// split the URL up by /, and grab the 3rd element
+	exploded := strings.Split(r.RequestURI, "/")
+	roomID, err := strconv.Atoi(exploded[2])
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "missing url parameter")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
 	// get reservation from session(converting raw data to model), add room id and save
 	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 	res.RoomID = roomID
@@ -407,7 +417,8 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	// get the room name
 	room, err := m.DB.GetRoomByID(roomID)
 	if err != nil {
-		helpers.ServerError(w, err)
+		m.App.Session.Put(r.Context(), "error", "Can't get room from db!")
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
 
