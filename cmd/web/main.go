@@ -33,6 +33,14 @@ func main() {
 	}
 	defer db.SQL.Close()
 
+	// automatically send email at the start with standard library
+	/* from := "me@here.com"
+	auth:= smtp.PlainAuth("",from,"","localhost")
+	err = smtp.SendMail("localhost:1025",auth,from,[]string["you@there.com"],[]byte("Hello, world"))
+	if err != nil {
+		log.Println(err)
+	} */
+
 	// set the server
 	_, _ = fmt.Printf("Starting application on port %s \n", portNumber)
 	srv := &http.Server{
