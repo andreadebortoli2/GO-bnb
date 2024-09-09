@@ -21,6 +21,7 @@ func routes(app *config.AppConfig) http.Handler {
 	// load and use the session
 	mux.Use(SessionLoad)
 
+	// routes
 	mux.Get("/", handlers.Repo.Home)
 	mux.Get("/about", handlers.Repo.About)
 	mux.Get("/generals-quarters", handlers.Repo.Generals)
@@ -44,6 +45,15 @@ func routes(app *config.AppConfig) http.Handler {
 	// define file server where to take static files
 	fileServer := http.FileServer(http.Dir("./static"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
+
+	// secure routes
+	mux.Route("/admin", func(mux chi.Router) {
+		// auth middleware to secure routes
+		mux.Use(Auth)
+
+		// routes admin/...
+		mux.Get("/dashboard", handlers.Repo.AdminDashboard)
+	})
 
 	return mux
 }
