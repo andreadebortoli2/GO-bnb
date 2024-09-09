@@ -36,14 +36,6 @@ func main() {
 	defer close(app.MailChan)
 	fmt.Println("Starting mail listener...")
 	listenForMail()
-	// test the mail channel
-	/* msg := models.MailData{
-		To:      "john@doe.ca",
-		From:    "me@here.com",
-		Subject: "Some subject",
-		Content: "",
-	}
-	app.MailChan <- msg */
 
 	// automatically send email at the start with standard library
 	/* from := "me@here.com"
