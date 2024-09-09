@@ -33,6 +33,18 @@ func main() {
 	}
 	defer db.SQL.Close()
 
+	defer close(app.MailChan)
+	fmt.Println("Starting mail listener...")
+	listenForMail()
+	// test the mail channel
+	/* msg := models.MailData{
+		To:      "john@doe.ca",
+		From:    "me@here.com",
+		Subject: "Some subject",
+		Content: "",
+	}
+	app.MailChan <- msg */
+
 	// automatically send email at the start with standard library
 	/* from := "me@here.com"
 	auth:= smtp.PlainAuth("",from,"","localhost")
@@ -58,6 +70,10 @@ func run() (*driver.DB, error) {
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+
+	// open a channel to serve emails through, defer in main not in run so the channel will not be closed as soon as the functionrun is executed
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
 
 	// change to true when in production
 	app.InProduction = false
