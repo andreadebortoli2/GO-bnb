@@ -43,6 +43,11 @@ func TestMain(m *testing.M) {
 	session.Cookie.Secure = app.InProduction
 	app.Session = session
 
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
+	defer close(mailChan)
+	listenForMail()
+
 	templateCache, err := CreateTestTemplateCache()
 	if err != nil {
 		log.Fatal("cannot create template cache")
@@ -56,6 +61,14 @@ func TestMain(m *testing.M) {
 
 	// run test before exit running
 	os.Exit(m.Run())
+}
+
+func listenForMail() {
+	go func() {
+		for {
+			_ = <-app.MailChan
+		}
+	}()
 }
 
 func getRoutes() http.Handler {
@@ -100,7 +113,7 @@ func SessionLoad(next http.Handler) http.Handler {
 	return session.LoadAndSave(next)
 }
 
-// from render copy, paste and fix everything to create templates cache cause in test we are not running the full app
+// from render: copy, paste and fix everything to create templates cache cause in test we are not running the full app
 
 func CreateTestTemplateCache() (map[string]*template.Template, error) {
 	myCache := map[string]*template.Template{}
