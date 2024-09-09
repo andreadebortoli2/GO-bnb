@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
@@ -38,7 +41,17 @@ func sendMsg(m models.MailData) {
 	// set from address, to address and subject from the MailData struct
 	email.SetFrom(m.From).AddTo(m.To).SetSubject(m.Subject)
 	// set the message body
-	email.SetBody(mail.TextHTML, string(m.Content))
+	if m.Template == "" {
+		email.SetBody(mail.TextHTML, string(m.Content))
+	} else {
+		data, err := os.ReadFile(fmt.Sprintf("./email-templates/%s", m.Template))
+		if err != nil {
+			app.ErrorLog.Println(err)
+		}
+		mailTemplate := string(data)
+		msgToSend := strings.Replace(mailTemplate, "[%body%]", m.Content, 1)
+		email.SetBody(mail.TextHTML, msgToSend)
+	}
 
 	// send the email
 	err = email.Send(client)
