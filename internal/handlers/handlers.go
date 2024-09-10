@@ -12,6 +12,7 @@ import (
 	"github.com/andreadebortoli2/GO-bnb/internal/config"
 	"github.com/andreadebortoli2/GO-bnb/internal/driver"
 	"github.com/andreadebortoli2/GO-bnb/internal/forms"
+	"github.com/andreadebortoli2/GO-bnb/internal/helpers"
 	"github.com/andreadebortoli2/GO-bnb/internal/models"
 	"github.com/andreadebortoli2/GO-bnb/internal/render"
 	"github.com/andreadebortoli2/GO-bnb/internal/repository"
@@ -524,7 +525,19 @@ func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request
 
 // AdminAllReservations
 func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
-	render.Templates(w, r, "admin-all-reservations.page.tmpl", &models.TemplateData{})
+
+	reservations, err := m.DB.AllReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["reservations"] = reservations
+
+	render.Templates(w, r, "admin-all-reservations.page.tmpl", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // AdminReservationsCalendar
