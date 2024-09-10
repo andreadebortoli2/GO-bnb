@@ -5,7 +5,7 @@
         <div class="row">
           <div class="col">
             <h1 class="text-center mt-4">Login</h1>
-            <from method="post" action="/user/login">
+            <form method="post" action="/user/login">
                 <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
                 <div class="form-group">
                     <label for="email">Email:</label>
