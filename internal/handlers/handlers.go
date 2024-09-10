@@ -512,6 +512,22 @@ func (m *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 }
 
+// AdminDashboard
 func (m *Repository) AdminDashboard(w http.ResponseWriter, r *http.Request) {
 	render.Templates(w, r, "admin-dashboard.page.tmpl", &models.TemplateData{})
+}
+
+// AdminNewReservtions
+func (m *Repository) AdminNewReservations(w http.ResponseWriter, r *http.Request) {
+	render.Templates(w, r, "admin-new-reservations.page.tmpl", &models.TemplateData{})
+}
+
+// AdminAllReservations
+func (m *Repository) AdminAllReservations(w http.ResponseWriter, r *http.Request) {
+	render.Templates(w, r, "admin-all-reservations.page.tmpl", &models.TemplateData{})
+}
+
+// AdminReservationsCalendar
+func (m *Repository) AdminReservationsCalendar(w http.ResponseWriter, r *http.Request) {
+	render.Templates(w, r, "admin-reservations-calendar.page.tmpl", &models.TemplateData{})
 }
