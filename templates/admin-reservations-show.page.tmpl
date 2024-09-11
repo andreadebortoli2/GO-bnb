@@ -1,0 +1,55 @@
+{{template "admin" .}}
+
+{{define "page-title"}}
+    Reservation
+{{end}}
+
+{{define "content"}}
+    {{$res := index .Data "reservation"}}
+    {{$src := index .StringMap "src"}}
+    <div class="col-md-12">
+        <p>
+            <strong>Arrival:</strong> {{humanDate $res.StartDate}} <br>
+            <strong>Departure:</strong> {{humanDate $res.EndDate}} <br>
+            <strong>Room:</strong> {{$res.Room.RoomName}} <br>
+        </p>
+
+        <form class="need-validation" action="/admin/reservations/{{$src}}/{{$res.ID}}" method="post" novalidate>
+
+            <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+            
+            <div class="form-group">
+            <label for="first-name">First name:</label>
+            {{with .Form.Errors.Get "first-name"}}
+            <label class="text-danger"> {{.}} </label>
+            {{end}}
+            <input class="form-control {{with .Form.Errors.Get "first-name"}} is-invalid {{end}}" type="text" name="first-name" id="first-name" value="{{$res.FirstName}}" />
+            </div>
+            <div class="form-group">
+            <label for="last-name">Last name:</label>
+            {{with .Form.Errors.Get "last-name"}}
+            <label class="text-danger"> {{.}} </label>
+            {{end}}
+            <input class="form-control {{with .Form.Errors.Get "last-name"}} is-invalid {{end}}" type="text" name="last-name" id="last-name" value="{{$res.LastName}}" />
+            </div>
+
+            <div class="form-group">
+            <label for="email">Email:</label>
+            {{with .Form.Errors.Get "email"}}
+            <label class="text-danger"> {{.}} </label>
+            {{end}}
+            <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" type="email" name="email" id="email" value="{{$res.Email}}" />
+            </div>
+            <div class="form-group">
+            <label for="phone">Phone number:</label>
+            {{with .Form.Errors.Get "phone"}}
+            <label class="text-danger"> {{.}} </label>
+            {{end}}
+            <input class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" type="text" name="phone" id="phone" value="{{$res.Phone}}" />
+            </div>
+            <hr />
+            <input type="submit" class="btn btn-primary" value="Make reservation" />
+            <a href="/admin/reservations-{{$src}}" class="btn btn-warning">Cancel</a>
+        </form>
+    </div>
+{{end}}
