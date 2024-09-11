@@ -17,8 +17,7 @@
             </p>
 
 
-            {{/*  <form class="need-validation" action="/make-reservation" method="post" novalidate>  */}}
-            <form action="/make-reservation" method="post">
+            <form class="need-validation" action="/make-reservation" method="post" novalidate>
 
               <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
               <input type="hidden" name="start_date" value="{{index .StringMap "start_date"}}">
