@@ -14,9 +14,11 @@
     <!-- plugin css for this page -->
     <!-- End plugin css for this page -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="/static/admin/css/style.css">
+    <link rel="stylesheet" href="/static/admin/css/style.css" />
     <!-- endinject -->
     <link rel="shortcut icon" href="/static/admin/images/favicon.png" />
+    <!-- Notie alert style cdn -->
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css" />
 
     <style>
         .footer, .content-wrapper {
@@ -25,12 +27,16 @@
         label {
             font-weight: bold;
         }
+        .notie-container {
+            z-index: 50000;
+        }
     </style>
 
     {{block "css" .}}
 
     {{end}}
     </head>
+
     <body>
     <div class="container-scroller">
 
@@ -142,6 +148,46 @@
     <!-- Custom js for this page-->
     <script src="/static/admin/js/dashboard.js"></script>
     <!-- End custom js for this page-->
+    <!-- Notie alert js cdn -->
+    <script src="https://unpkg.com/notie"></script>
+    <!-- Sweetalert2 js cdn -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="/static/js/app.js"></script>
+
+    <script>
+        // Sweetalert2 module
+        let attention = sweetalertPrompt();
+
+        // Notie alert logic
+        function notify(message, messageType) {
+            notie.alert({
+                type: messageType,
+                text: message,
+            });
+        }
+
+        // Sweetalert2 logic
+        function notifyModal(title, html, icon, confirmationButton) {
+            Swal.fire({
+                title: title,
+                html: html,
+                icon: icon,
+                confirmButtonText: confirmationButton,
+            });
+        }
+
+        // handle eventual messages
+        {{with .Error}}
+        notify("{{.}}","error")
+        {{end}}
+        {{with .Flash}}
+        notify("{{.}}","success")
+        {{end}}
+        {{with .Warning}}
+        notify("{{.}}","warning")
+        {{end}}
+    </script>
 
     {{block "js" .}}
 
