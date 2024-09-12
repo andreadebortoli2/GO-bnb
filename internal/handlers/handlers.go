@@ -612,8 +612,8 @@ func (m *Repository) AdminPostShowReservation(w http.ResponseWriter, r *http.Req
 		return
 	}
 
-	reservation.FirstName = r.Form.Get("first_name")
-	reservation.LastName = r.Form.Get("last_name")
+	reservation.FirstName = r.Form.Get("first-name")
+	reservation.LastName = r.Form.Get("last-name")
 	reservation.Email = r.Form.Get("email")
 	reservation.Phone = r.Form.Get("phone")
 
