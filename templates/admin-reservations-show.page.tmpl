@@ -19,42 +19,61 @@
             <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
             
             <div class="form-group">
-            <label for="first-name">First name:</label>
-            {{with .Form.Errors.Get "first-name"}}
-            <label class="text-danger"> {{.}} </label>
-            {{end}}
-            <input class="form-control {{with .Form.Errors.Get "first-name"}} is-invalid {{end}}" type="text" name="first-name" id="first-name" value="{{$res.FirstName}}" />
-            </div>
-            <div class="form-group">
-            <label for="last-name">Last name:</label>
-            {{with .Form.Errors.Get "last-name"}}
-            <label class="text-danger"> {{.}} </label>
-            {{end}}
-            <input class="form-control {{with .Form.Errors.Get "last-name"}} is-invalid {{end}}" type="text" name="last-name" id="last-name" value="{{$res.LastName}}" />
+                <label for="first-name">First name:</label>
+
+                {{with .Form.Errors.Get "first-name"}}
+                    <label class="text-danger"> {{.}} </label>
+                {{end}}
+
+                <input class="form-control {{with .Form.Errors.Get "first-name"}} is-invalid {{end}}" type="text" name="first-name" id="first-name" value="{{$res.FirstName}}" />
             </div>
 
             <div class="form-group">
-            <label for="email">Email:</label>
-            {{with .Form.Errors.Get "email"}}
-            <label class="text-danger"> {{.}} </label>
-            {{end}}
-            <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" type="email" name="email" id="email" value="{{$res.Email}}" />
+                <label for="last-name">Last name:</label>
+
+                {{with .Form.Errors.Get "last-name"}}
+                    <label class="text-danger"> {{.}} </label>
+                {{end}}
+                
+                <input class="form-control {{with .Form.Errors.Get "last-name"}} is-invalid {{end}}" type="text" name="last-name" id="last-name" value="{{$res.LastName}}" />
             </div>
+
             <div class="form-group">
-            <label for="phone">Phone number:</label>
-            {{with .Form.Errors.Get "phone"}}
-            <label class="text-danger"> {{.}} </label>
-            {{end}}
-            <input class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" type="text" name="phone" id="phone" value="{{$res.Phone}}" />
+                <label for="email">Email:</label>
+
+                {{with .Form.Errors.Get "email"}}
+                    <label class="text-danger"> {{.}} </label>
+                {{end}}
+
+                <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" type="email" name="email" id="email" value="{{$res.Email}}" />
             </div>
+
+            <div class="form-group">
+                <label for="phone">Phone number:</label>
+
+                {{with .Form.Errors.Get "phone"}}
+                    <label class="text-danger"> {{.}} </label>
+                {{end}}
+
+                <input class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" type="text" name="phone" id="phone" value="{{$res.Phone}}" />
+            </div>
+
             <hr />
+
             <div class="float-start">
-            <input type="submit" class="btn btn-primary" value="Save" />
-            <a href="/admin/reservations-{{$src}}" class="btn btn-warning">Cancel</a>
-            <a href="#!" class="btn btn-info" onclick="processRes({{$res.ID}})">Mark as Processed</a>
+                <input type="submit" class="btn btn-primary" value="Save" />
+
+                {{if eq $src "cal"}}
+                    <a href="#!" onclick="window.history.go(-1)" class="btn btn-warning">Cancel</a>
+                {{else}}
+                    <a href="/admin/reservations-{{$src}}" class="btn btn-warning">Cancel</a>
+                {{end}}
+                
+                <a href="#!" class="btn btn-info" onclick="processRes({{$res.ID}})">Mark as Processed</a>
             </div>
+
             <div class="float-end">
-            <a href="#!" class="btn btn-danger" onclick="deleteRes({{$res.ID}})">Delete</a>
+                <a href="#!" class="btn btn-danger" onclick="deleteRes({{$res.ID}})">Delete</a>
             </div>
         </form>
     </div>
