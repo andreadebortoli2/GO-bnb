@@ -57,11 +57,12 @@ func main() {
 
 func run() (*driver.DB, error) {
 
-	// what i'm going to store in the session
+	// declare what i'm going to store in the session
 	gob.Register(models.Reservation{})
 	gob.Register(models.User{})
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
+	gob.Register(map[string]int{})
 
 	// open a channel to serve emails through, defer in main not in run so the channel will not be closed as soon as the functionrun is executed
 	mailChan := make(chan models.MailData)
