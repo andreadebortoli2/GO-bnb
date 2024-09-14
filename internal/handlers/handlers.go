@@ -17,7 +17,6 @@ import (
 	"github.com/andreadebortoli2/GO-bnb/internal/render"
 	"github.com/andreadebortoli2/GO-bnb/internal/repository"
 	"github.com/andreadebortoli2/GO-bnb/internal/repository/dbrepo"
-	"github.com/go-chi/chi/v5"
 )
 
 // Repo the repository used by the handlers
@@ -85,7 +84,7 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse form")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	start := r.Form.Get("start")
@@ -95,20 +94,20 @@ func (m *Repository) PostAvailability(w http.ResponseWriter, r *http.Request) {
 	startDate, err := time.Parse(layout, start)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse start date")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	endDate, err := time.Parse(layout, end)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse end date")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	rooms, err := m.DB.SearchAvailabilityForAllRooms(startDate, endDate)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "error searching in the db")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -166,19 +165,19 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 	startDate, err := time.Parse(layout, sd)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse start date")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	endDate, err := time.Parse(layout, ed)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse end date")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "invalid data")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -216,7 +215,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		m.App.Session.Put(r.Context(), "error", "can't get reservation from session")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -224,7 +223,7 @@ func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	room, err := m.DB.GetRoomByID(res.RoomID)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't find room")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	res.Room.RoomName = room.RoomName
@@ -256,7 +255,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse form")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -267,21 +266,21 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	startDate, err := time.Parse(layout, sd)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't parse start date")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	endDate, err := time.Parse(layout, ed)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't get parse end date")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "invalid data!")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -317,7 +316,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	newReservationID, err := m.DB.InsertReservation(reservation)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't insert reservation into database")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -333,7 +332,7 @@ func (m *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err = m.DB.InsertRoomRestriction(restriction)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't insert restriction into database")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -380,7 +379,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	if !ok {
 		// if there is no reservation in session cause of error or user bad behavior send back to home page with error message
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	// remove reservation from session
@@ -394,7 +393,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	room, err := m.DB.GetRoomByID(reservation.RoomID)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "can't find room")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	rn := room.RoomName
@@ -420,7 +419,7 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomID, err := strconv.Atoi(exploded[2])
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "missing url parameter")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -428,7 +427,7 @@ func (m *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
 		m.App.Session.Put(r.Context(), "error", "Can't get reservation from session")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	res.RoomID = roomID
@@ -451,7 +450,7 @@ func (m *Repository) BookRoom(w http.ResponseWriter, r *http.Request) {
 	room, err := m.DB.GetRoomByID(roomID)
 	if err != nil {
 		m.App.Session.Put(r.Context(), "error", "Can't get room from db!")
-		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
@@ -497,7 +496,6 @@ func (m *Repository) PostShowLogin(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 	id, _, err := m.DB.Authenticate(email, password)
 	if err != nil {
-		log.Println(err)
 		m.App.Session.Put(r.Context(), "error", "Invalid login credential")
 		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 		return
@@ -642,12 +640,16 @@ func (m *Repository) AdminPostShowReservation(w http.ResponseWriter, r *http.Req
 
 // AdminProcessReservation marks a reservation as processed
 func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+
+	explodedUrl := strings.Split(r.RequestURI, "/")
+
+	id, err := strconv.Atoi(explodedUrl[4])
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	src := chi.URLParam(r, "src")
+
+	src := explodedUrl[3]
 
 	err = m.DB.UpdateProcessedForReservation(id, 1)
 	if err != nil {
@@ -669,12 +671,16 @@ func (m *Repository) AdminProcessReservation(w http.ResponseWriter, r *http.Requ
 
 // AdminDeleteReservation deletes a reservation
 func (m *Repository) AdminDeleteReservation(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+
+	explodedUrl := strings.Split(r.RequestURI, "/")
+
+	id, err := strconv.Atoi(explodedUrl[4])
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	src := chi.URLParam(r, "src")
+
+	src := explodedUrl[3]
 
 	err = m.DB.DeleteReservation(id)
 	if err != nil {
