@@ -10,3 +10,4 @@ This is the repository for my bookings and reservations project.
 - Uses [pgx - PostgreSQL Driver and Toolkit](https://github.com/jackc/pgx)
 - Uses [Go Simple Mail](https://github.com/xhit/go-simple-mail)
 - Uses [RoyalUI](https://github.com/BootstrapDash/RoyalUI-Free-Bootstrap-Admin-Template) admin template
+- Uses [Foundation Framework](https://get.foundation/emails.html) for emails
