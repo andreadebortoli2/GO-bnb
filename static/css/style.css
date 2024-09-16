@@ -1,10 +1,13 @@
 .my-footer {
-  height: 5rem;
   margin-top: 2rem;
   padding: 1rem;
   background-color: #163b65;
   color: #ffffff;
   font-size: 0.8rem;
+}
+
+main {
+  min-height: 80vh;
 }
 
 /* override Notie alert styles */
